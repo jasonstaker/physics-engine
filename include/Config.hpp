@@ -5,8 +5,8 @@
 namespace Config {
 
     // Window dimensions
-    static constexpr unsigned int windowWidth = 600;
-    static constexpr unsigned int windowHeight = 600;
+    static constexpr unsigned int windowWidth = 1000;
+    static constexpr unsigned int windowHeight = 800;
 
     // Physics parameters
     constexpr static float timeScale = 6.0f;
@@ -17,12 +17,13 @@ namespace Config {
 
     // Simulation variables
     static constexpr float simulationRunTime = 6.0f;
-    static constexpr float renderFrequencyMultiplier = 6.0f;
+    static constexpr float renderFrequencyMultiplier = 3.0f;
     static constexpr float targetFPS = 60.0f;
     const double frameDuration = 1000.0 / targetFPS;
     const float fixedTimeStep = 1.0f / (targetFPS*renderFrequencyMultiplier);
+
     static const int numBalls = 1000;
-    static const float radius = 6.0f;
+    static const float radius = 10.0f;
     static const float spawnMargin = radius;
     static const int maxAttempts = 5000;
 }

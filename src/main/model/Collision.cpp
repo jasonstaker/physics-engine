@@ -1,10 +1,9 @@
 // Collision.cpp
 #include "Collision.hpp"
-#include <iostream>
 
 Collision::Collision() {}
 
-void Collision::update(std::vector<std::shared_ptr<Entity>>& entities) {
+void Collision::update(vector<shared_ptr<Entity>>& entities) {
     qt.clear();
     for (auto& entityPtr : entities) {
         if (entityPtr) {
@@ -12,7 +11,7 @@ void Collision::update(std::vector<std::shared_ptr<Entity>>& entities) {
         }
     }
 
-    std::vector<std::shared_ptr<Entity>> nearbyBuffer;
+    vector<shared_ptr<Entity>> nearbyBuffer;
     nearbyBuffer.reserve(64);
 
     for (auto& entityPtr : entities) {
@@ -20,7 +19,7 @@ void Collision::update(std::vector<std::shared_ptr<Entity>>& entities) {
             continue;
         }
 
-        auto ballPtr = std::static_pointer_cast<Ball>(entityPtr);
+        auto ballPtr = static_pointer_cast<Ball>(entityPtr);
         float radiusA = ballPtr->getRadius();
         Vec position = ballPtr->getPosition();
 
@@ -34,12 +33,8 @@ void Collision::update(std::vector<std::shared_ptr<Entity>>& entities) {
         qt.query(range, nearbyBuffer);
 
         for (auto& otherPtr : nearbyBuffer) {
-            if (!otherPtr || otherPtr == entityPtr) {
-                continue;
-            }
-            if (entityPtr.get() >= otherPtr.get()) {
-                continue;
-            }
+            if (!otherPtr || otherPtr == entityPtr) continue;
+            if (entityPtr.get() >= otherPtr.get()) continue;
 
             checkAndResolveBetween(entityPtr, otherPtr);
         }
@@ -52,36 +47,36 @@ void Collision::update(std::vector<std::shared_ptr<Entity>>& entities) {
     }
 }
 
-void Collision::checkAndResolveBetween(std::shared_ptr<Entity> entityOne,
-                                       std::shared_ptr<Entity> entityTwo) {
+void Collision::checkAndResolveBetween(shared_ptr<Entity> entityOne,
+                                       shared_ptr<Entity> entityTwo) {
     if (checkCollisionBetween(entityOne, entityTwo)) {
         resolveCollisionBetween(entityOne, entityTwo);
     }
 }
 
 // for circles only currently
-bool Collision::checkCollisionBetween(const std::shared_ptr<Entity>& entityOne,
-                                      const std::shared_ptr<Entity>& entityTwo) {
-    auto ballOne = std::static_pointer_cast<Ball>(entityOne);
-    auto ballTwo = std::static_pointer_cast<Ball>(entityTwo);
+bool Collision::checkCollisionBetween(const shared_ptr<Entity>& entityOne,
+                                      const shared_ptr<Entity>& entityTwo) {
+    auto ballOne = static_pointer_cast<Ball>(entityOne);
+    auto ballTwo = static_pointer_cast<Ball>(entityTwo);
     Vec delta = ballOne->getPosition() - ballTwo->getPosition();
     float distSq = delta.dot(delta);
     float radiusSum = ballOne->getRadius() + ballTwo->getRadius();
     return distSq <= radiusSum * radiusSum;
 }
 
-bool Collision::checkCollisionBorder(const std::shared_ptr<Entity>& entity) {
-    auto ballPtr = std::static_pointer_cast<Ball>(entity);
+bool Collision::checkCollisionBorder(const shared_ptr<Entity>& entity) {
+    auto ballPtr = static_pointer_cast<Ball>(entity);
     return ((ballPtr->getPosition().x + ballPtr->getRadius()) >= Config::windowWidth)
         || ((ballPtr->getPosition().y + ballPtr->getRadius()) >= Config::windowHeight)
         || ((ballPtr->getPosition().x - ballPtr->getRadius()) <= 0)
         || ((ballPtr->getPosition().y - ballPtr->getRadius()) <= 0);
 }
 
-float Collision::distance(const std::shared_ptr<Entity> entityOne,
-                         const std::shared_ptr<Entity> entityTwo) {
-    auto ballOne = std::static_pointer_cast<Ball>(entityOne);
-    auto ballTwo = std::static_pointer_cast<Ball>(entityTwo);
+float Collision::distance(const shared_ptr<Entity> entityOne,
+                         const shared_ptr<Entity> entityTwo) {
+    auto ballOne = static_pointer_cast<Ball>(entityOne);
+    auto ballTwo = static_pointer_cast<Ball>(entityTwo);
     Vec distanceVector = ballOne->getPosition() - ballTwo->getPosition();
 
     return (distanceVector.norm()
@@ -89,8 +84,8 @@ float Collision::distance(const std::shared_ptr<Entity> entityOne,
             - ballTwo->getRadius());
 }
 
-void Collision::resolveCollisionBetween(std::shared_ptr<Entity>& entityOne,
-                                        std::shared_ptr<Entity>& entityTwo) {
+void Collision::resolveCollisionBetween(shared_ptr<Entity>& entityOne,
+                                        shared_ptr<Entity>& entityTwo) {
     Vec velocityOne = entityOne->getVelocity();
     Vec velocityTwo = entityTwo->getVelocity();
     float massOne = entityOne->getMass();
@@ -131,8 +126,8 @@ void Collision::resolveCollisionBetween(std::shared_ptr<Entity>& entityOne,
     entityTwo->getVelocity() = velocityTwoTangent + velocityTwoNormalAfterVector;
 }
 
-void Collision::resolveCollisionBorder(std::shared_ptr<Entity>& entity) {
-    auto ballPtr = std::static_pointer_cast<Ball>(entity);
+void Collision::resolveCollisionBorder(shared_ptr<Entity>& entity) {
+    auto ballPtr = static_pointer_cast<Ball>(entity);
     float impulseMagnitude = ballPtr->getMass();
 
     // Right border

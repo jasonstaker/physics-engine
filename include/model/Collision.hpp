@@ -17,7 +17,7 @@ using namespace std;
 class Collision {
 
     // fields
-    Quadtree qt = Quadtree(AABB(Vec(0, 0), Vec(Config::windowWidth, Config::windowHeight)), 4);
+    Quadtree qt = Quadtree(AABB(Vec(0, 0), Vec(Config::windowWidth, Config::windowHeight)), 6);
     vector<thread> threads;
 
 public:

@@ -1,6 +1,10 @@
 #pragma once
 
-#include <Vec.hpp>
+#include "Vec.hpp"
+#include <chrono>
+
+using namespace std;
+using namespace chrono;
 
 class Entity {
 public:

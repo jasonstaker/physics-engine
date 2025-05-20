@@ -12,6 +12,7 @@ Renderer::Renderer() {}
 
 Renderer::Renderer(unsigned int width, unsigned int height) : width(width), height(height) {
     window = new sf::RenderWindow(sf::VideoMode({width, height}), "Physics Engine");
+    window->setVerticalSyncEnabled(true);
 }
 
 void Renderer::render(const vector<shared_ptr<Entity>>& entities) {
